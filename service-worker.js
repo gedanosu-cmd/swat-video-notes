@@ -1,4 +1,4 @@
-const cacheName = "police-video-notes-v5";
+const cacheName = "police-video-notes-v6";
 const appShell = [
   "./",
   "./index.html",
