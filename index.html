@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101416">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SWAT Notes">
+    <title>SWAT Video Notes</title>
+    <link rel="manifest" href="manifest.webmanifest?v=4">
+    <link rel="apple-touch-icon" href="assets/video-study-header.png">
+    <link rel="stylesheet" href="styles.css?v=4">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <img src="assets/video-study-header.png" alt="" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <p class="eyebrow">SWAT VIDEO TRANSLATION NOTE</p>
+          <h1>英語のSWAT動画を、日本語で追えるノートにする。</h1>
+          <p class="hero-copy">動画URL、英語字幕、説明文を貼って、要約・翻訳依頼文・専門用語メモをまとめます。</p>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="panel input-panel" aria-label="動画情報入力">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">INPUT</p>
+              <h2>動画と字幕</h2>
+            </div>
+            <button class="ghost-button" id="sampleButton" type="button">サンプル</button>
+          </div>
+
+          <label>
+            動画URL
+            <input id="videoUrl" type="url" placeholder="https://www.youtube.com/watch?v=...">
+          </label>
+
+          <label>
+            タイトル
+            <input id="videoTitle" type="text" placeholder="例: SWAT training / gear review / ride along">
+          </label>
+
+          <label>
+            英語字幕・説明文
+            <textarea id="transcript" rows="14" placeholder="YouTubeの英語字幕、説明文、聞き取れた英語を貼ってください。"></textarea>
+          </label>
+
+          <div class="tag-row" aria-label="タグ">
+            <button class="tag active" type="button" data-tag="training">訓練</button>
+            <button class="tag" type="button" data-tag="gear">装備</button>
+            <button class="tag" type="button" data-tag="vehicle">車両</button>
+            <button class="tag" type="button" data-tag="documentary">密着</button>
+          </div>
+
+          <div class="action-row">
+            <button class="primary-button" id="analyzeButton" type="button">日本語メモを作る</button>
+            <button class="secondary-button" id="quickSaveButton" type="button" onclick="saveCurrentNote()">URLだけ保存</button>
+            <button class="secondary-button" id="clearButton" type="button">クリア</button>
+          </div>
+        </section>
+
+        <section class="panel output-panel" aria-label="日本語メモ">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">JAPANESE NOTE</p>
+              <h2>理解用メモ</h2>
+            </div>
+            <button class="ghost-button" id="copyPromptButton" type="button">依頼文コピー</button>
+          </div>
+
+          <div class="note-grid">
+            <article>
+              <h3>3行要約</h3>
+              <ol id="summaryList">
+                <li>字幕を貼ると、内容を日本語で整理する枠ができます。</li>
+                <li>専門用語を拾って、あとで調べやすくします。</li>
+                <li>翻訳依頼文をコピーしてAIに投げられます。</li>
+              </ol>
+            </article>
+
+            <article>
+              <h3>見どころ</h3>
+              <p id="highlights">動画の説明文や字幕から、装備・訓練・車両・部隊紹介などの見どころ候補を表示します。</p>
+            </article>
+
+            <article>
+              <h3>用語メモ</h3>
+              <div id="terms" class="terms">
+                <span>tactical</span>
+                <span>breach</span>
+                <span>entry team</span>
+              </div>
+            </article>
+
+            <article class="wide-card">
+              <h3>AIに渡す翻訳依頼文</h3>
+              <textarea id="promptOutput" rows="10" readonly></textarea>
+            </article>
+          </div>
+
+          <div class="action-row">
+            <button class="primary-button" id="saveButton" type="button">この動画を保存</button>
+            <button class="secondary-button" id="exportButton" type="button">Markdown出力</button>
+          </div>
+        </section>
+
+        <aside class="panel library-panel" aria-label="保存した動画">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">LIBRARY</p>
+              <h2>保存リスト</h2>
+            </div>
+            <button class="ghost-button danger" id="deleteButton" type="button">削除</button>
+          </div>
+
+          <div class="stats">
+            <div>
+              <strong id="savedCount">0</strong>
+              <span>videos</span>
+            </div>
+            <div>
+              <strong id="activeTag">訓練</strong>
+              <span>tag</span>
+            </div>
+          </div>
+
+          <div id="libraryList" class="library-list"></div>
+        </aside>
+      </main>
+
+      <nav class="mobile-tabs" aria-label="スマホ用ナビゲーション">
+        <button class="mobile-tab active" type="button" data-view="input-panel">入力</button>
+        <button class="mobile-tab" type="button" data-view="output-panel">メモ</button>
+        <button class="mobile-tab" type="button" data-view="library-panel">保存</button>
+      </nav>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js?v=4"></script>
+  </body>
+</html>

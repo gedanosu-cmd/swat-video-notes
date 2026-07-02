@@ -1,0 +1,18 @@
+{
+  "name": "SWAT Video Notes",
+  "short_name": "SWAT Notes",
+  "description": "英語のSWAT関連動画を日本語で理解するための動画ノート。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#101416",
+  "theme_color": "#101416",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/video-study-header.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
