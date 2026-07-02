@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#101416">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="SWAT Notes">
-    <title>SWAT Video Notes</title>
-    <link rel="manifest" href="manifest.webmanifest?v=4">
+    <meta name="apple-mobile-web-app-title" content="Police Notes">
+    <title>Police Video Notes</title>
+    <link rel="manifest" href="manifest.webmanifest?v=5">
     <link rel="apple-touch-icon" href="assets/video-study-header.png">
-    <link rel="stylesheet" href="styles.css?v=4">
+    <link rel="stylesheet" href="styles.css?v=5">
   </head>
   <body>
     <div class="app-shell">
@@ -17,9 +17,9 @@
         <img src="assets/video-study-header.png" alt="" class="hero-image">
         <div class="hero-overlay"></div>
         <div class="hero-content">
-          <p class="eyebrow">SWAT VIDEO TRANSLATION NOTE</p>
-          <h1>英語のSWAT動画を、日本語で追えるノートにする。</h1>
-          <p class="hero-copy">動画URL、英語字幕、説明文を貼って、要約・翻訳依頼文・専門用語メモをまとめます。</p>
+          <p class="eyebrow">OVERSEAS POLICE VIDEO NOTE</p>
+          <h1>英語の海外警察動画を、日本語で追えるノートにする。</h1>
+          <p class="hero-copy">パトロール、ボディカム、SWAT、保安官、K9、装備動画を日本語メモにまとめます。</p>
         </div>
       </header>
 
@@ -40,7 +40,7 @@
 
           <label>
             タイトル
-            <input id="videoTitle" type="text" placeholder="例: SWAT training / gear review / ride along">
+            <input id="videoTitle" type="text" placeholder="例: police bodycam / sheriff patrol / K9 training">
           </label>
 
           <label>
@@ -49,10 +49,12 @@
           </label>
 
           <div class="tag-row" aria-label="タグ">
-            <button class="tag active" type="button" data-tag="training">訓練</button>
+            <button class="tag active" type="button" data-tag="patrol">パトロール</button>
+            <button class="tag" type="button" data-tag="bodycam">ボディカム</button>
+            <button class="tag" type="button" data-tag="swat">SWAT</button>
+            <button class="tag" type="button" data-tag="k9">K9</button>
             <button class="tag" type="button" data-tag="gear">装備</button>
             <button class="tag" type="button" data-tag="vehicle">車両</button>
-            <button class="tag" type="button" data-tag="documentary">密着</button>
           </div>
 
           <div class="action-row">
@@ -83,15 +85,15 @@
 
             <article>
               <h3>見どころ</h3>
-              <p id="highlights">動画の説明文や字幕から、装備・訓練・車両・部隊紹介などの見どころ候補を表示します。</p>
+              <p id="highlights">動画の説明文や字幕から、パトロール、ボディカム、装備、車両、部隊紹介などの見どころ候補を表示します。</p>
             </article>
 
             <article>
               <h3>用語メモ</h3>
               <div id="terms" class="terms">
-                <span>tactical</span>
-                <span>breach</span>
-                <span>entry team</span>
+                <span>bodycam</span>
+                <span>sheriff</span>
+                <span>traffic stop</span>
               </div>
             </article>
 
@@ -122,7 +124,7 @@
               <span>videos</span>
             </div>
             <div>
-              <strong id="activeTag">訓練</strong>
+              <strong id="activeTag">パトロール</strong>
               <span>tag</span>
             </div>
           </div>
@@ -139,6 +141,6 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js?v=4"></script>
+    <script src="script.js?v=5"></script>
   </body>
 </html>

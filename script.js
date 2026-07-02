@@ -22,12 +22,28 @@ const els = {
   mobileTabs: [...document.querySelectorAll(".mobile-tab")]
 };
 
-const storageKey = "swat-video-notes";
-let selectedTag = "training";
+const storageKey = "police-video-notes";
+const legacyStorageKey = "swat-video-notes";
+let selectedTag = "patrol";
 let selectedId = null;
 let notes = loadNotes();
 
 const glossary = [
+  ["bodycam", "警察官の装着カメラ、またはその映像"],
+  ["dashcam", "パトカーの車載カメラ"],
+  ["traffic stop", "交通違反などで車を停止させる職務質問"],
+  ["sheriff", "保安官。郡レベルの法執行機関の長や職員"],
+  ["deputy", "保安官代理、保安官事務所の警察官"],
+  ["trooper", "州警察官"],
+  ["patrol", "巡回、パトロール"],
+  ["pursuit", "追跡、カーチェイス"],
+  ["dispatch", "通信指令、指令係"],
+  ["K9", "警察犬部隊、警察犬"],
+  ["DUI", "飲酒または薬物影響下での運転"],
+  ["probable cause", "捜査や逮捕の相当な理由"],
+  ["Miranda rights", "黙秘権などの告知"],
+  ["citation", "違反切符、出頭命令"],
+  ["backup", "応援、増援"],
   ["tactical", "戦術的、作戦上の"],
   ["breach", "扉や障害物を突破すること"],
   ["entry", "建物や部屋に入ること"],
@@ -37,6 +53,7 @@ const glossary = [
   ["perimeter", "外周警戒、包囲線"],
   ["suspect", "容疑者"],
   ["hostage", "人質"],
+  ["SWAT", "特殊対応部隊"],
   ["training", "訓練"],
   ["gear", "装備"],
   ["vehicle", "車両"],
@@ -48,7 +65,11 @@ const glossary = [
 
 function loadNotes() {
   try {
-    return JSON.parse(localStorage.getItem(storageKey)) || [];
+    const current = JSON.parse(localStorage.getItem(storageKey));
+    if (current) return current;
+    const legacy = JSON.parse(localStorage.getItem(legacyStorageKey));
+    if (legacy) return legacy;
+    return [];
   } catch {
     return [];
   }
@@ -89,7 +110,7 @@ function makeSummary(text) {
 
   const sentences = clean.split(/(?<=[.!?])\s+/).filter(Boolean);
   const first = sentences[0] || clean.slice(0, 120);
-  const second = sentences.find((line) => /training|gear|vehicle|team|officer|tactical|entry|clear/i.test(line)) || sentences[1] || clean.slice(120, 240);
+  const second = sentences.find((line) => /bodycam|patrol|sheriff|deputy|trooper|traffic|pursuit|K9|training|gear|vehicle|team|officer|tactical|entry|clear/i.test(line)) || sentences[1] || clean.slice(120, 240);
   const third = clean.length > 420
     ? "長めの字幕なので、全体翻訳・用語解説・見どころ抽出に分けて読むのがおすすめです。"
     : "短めの字幕なので、まず全体訳を作ってから分からない用語を確認すると読みやすいです。";
@@ -110,13 +131,16 @@ function findTerms(text) {
 
 function makeHighlights(text, tag) {
   const map = {
-    training: "訓練の流れ、隊員同士の連携、部屋や区域を確認する場面に注目すると理解しやすいです。",
+    patrol: "巡回中のやり取り、職務質問、通信指令との会話に注目すると流れを追いやすいです。",
+    bodycam: "ボディカム映像では、警察官の声かけ、相手の反応、周囲への確認が見どころです。",
+    swat: "SWATや特殊対応では、部隊の役割、装備、訓練や現場支援の説明に注目すると理解しやすいです。",
+    k9: "K9動画では、警察犬の役割、ハンドラーの指示、捜索や追跡の流れを見ると楽しめます。",
     gear: "装備名、ベスト・ヘルメット・盾・通信機器の説明が出る部分を重点的に訳すと楽しめます。",
     vehicle: "車両の用途、搭載装備、移動や現場支援の説明が見どころになりそうです。",
     documentary: "部隊紹介、インタビュー、訓練の背景説明を拾うと動画全体の意味が見えやすいです。"
   };
   const hasAudioCue = /radio|command|communicat|call/i.test(text);
-  return `${map[tag]}${hasAudioCue ? " 無線や指揮系統の話も出ているので、そこは用語メモに分けると追いやすいです。" : ""}`;
+  return `${map[tag] || map.patrol}${hasAudioCue ? " 無線や指令の話も出ているので、そこは用語メモに分けると追いやすいです。" : ""}`;
 }
 
 function makePrompt() {
@@ -125,7 +149,7 @@ function makePrompt() {
   const transcript = els.transcript.value.trim() || "ここに英語字幕や説明文を貼ります。";
   const tagLabel = document.querySelector(".tag.active")?.textContent || "未分類";
 
-  return `次のSWAT関連YouTube動画について、日本語で理解できるように整理してください。
+  return `次の海外警察関連YouTube動画について、日本語で理解できるように整理してください。
 
 動画タイトル: ${title}
 動画URL: ${url}
@@ -134,7 +158,7 @@ function makePrompt() {
 お願いしたいこと:
 1. 英語字幕を自然な日本語に翻訳
 2. 先に3行で要約
-3. SWAT、警察、装備、訓練に関係する専門用語をやさしく解説
+3. 海外警察、保安官、州警察、SWAT、K9、装備、パトロールに関係する専門用語をやさしく解説
 4. 動画の見どころを日本語で箇条書き
 5. 自動字幕の聞き間違いっぽい部分があれば推測して補足
 
@@ -183,7 +207,7 @@ function inferTitleFromUrl(url) {
   try {
     const parsed = new URL(url);
     if (parsed.hostname.includes("youtu")) {
-      return "YouTube video";
+      return "Police video";
     }
   } catch {
     return "";
@@ -262,7 +286,7 @@ function clearForm() {
 
 function exportMarkdown() {
   renderAnalysis();
-  const markdown = `# ${els.videoTitle.value.trim() || "SWAT Video Note"}
+  const markdown = `# ${els.videoTitle.value.trim() || "Police Video Note"}
 
 - URL: ${els.videoUrl.value.trim() || "未入力"}
 - タグ: ${document.querySelector(".tag.active")?.textContent || "未分類"}
@@ -321,9 +345,9 @@ els.deleteButton.addEventListener("click", () => {
 
 els.sampleButton.addEventListener("click", () => {
   els.videoUrl.value = "https://www.youtube.com/watch?v=example";
-  els.videoTitle.value = "Example SWAT training overview";
-  els.transcript.value = "In this training scenario, the entry team approaches the building and establishes a perimeter. Officers communicate by radio while the tactical unit checks each room. The team uses a shield during entry and clears the hallway before moving to the next area. The instructor explains the gear, safety rules, and how the scenario is evaluated.";
-  selectedTag = "training";
+  els.videoTitle.value = "Example police bodycam and patrol overview";
+  els.transcript.value = "In this bodycam video, an officer conducts a traffic stop and speaks with dispatch by radio. A deputy arrives as backup while the officer explains the reason for the stop. The video includes patrol procedures, vehicle details, and common police terms such as citation, probable cause, and K9 support.";
+  selectedTag = "bodycam";
   syncTags();
   renderAnalysis();
 });

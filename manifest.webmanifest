@@ -1,7 +1,7 @@
 {
-  "name": "SWAT Video Notes",
-  "short_name": "SWAT Notes",
-  "description": "英語のSWAT関連動画を日本語で理解するための動画ノート。",
+  "name": "Police Video Notes",
+  "short_name": "Police Notes",
+  "description": "英語の海外警察動画を日本語で理解するための動画ノート。",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#101416",

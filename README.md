@@ -1,6 +1,6 @@
-# SWAT Video Notes
+# Police Video Notes
 
-英語のSWAT関連YouTube動画を日本語で理解するためのローカルノートアプリです。
+英語の海外警察関連YouTube動画を日本語で理解するためのローカルノートアプリです。
 
 ## 使い方
 
