@@ -11,6 +11,9 @@ const els = {
   copyPromptButton: document.querySelector("#copyPromptButton"),
   saveButton: document.querySelector("#saveButton"),
   exportButton: document.querySelector("#exportButton"),
+  backupCopyButton: document.querySelector("#backupCopyButton"),
+  backupInput: document.querySelector("#backupInput"),
+  restoreButton: document.querySelector("#restoreButton"),
   deleteButton: document.querySelector("#deleteButton"),
   summaryList: document.querySelector("#summaryList"),
   highlights: document.querySelector("#highlights"),
@@ -309,6 +312,70 @@ ${els.promptOutput.value}
   navigator.clipboard.writeText(markdown).then(() => showToast("Markdownをコピーしました"));
 }
 
+function copyBackup() {
+  const backup = {
+    app: "police-video-notes",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    notes
+  };
+  const text = JSON.stringify(backup);
+  navigator.clipboard.writeText(text)
+    .then(() => showToast("保存データをコピーしました"))
+    .catch(() => {
+      els.backupInput.value = text;
+      els.backupInput.focus();
+      els.backupInput.select();
+      showToast("欄の文字をコピーしてください");
+    });
+}
+
+function restoreBackup() {
+  const raw = els.backupInput.value.trim();
+  if (!raw) {
+    showToast("復元データを貼ってください");
+    return;
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    const importedNotes = Array.isArray(parsed) ? parsed : parsed.notes;
+    if (!Array.isArray(importedNotes)) {
+      throw new Error("Invalid backup");
+    }
+
+    const normalized = importedNotes
+      .filter((note) => note && note.url)
+      .map((note) => ({
+        id: note.id || makeNoteId(),
+        url: String(note.url || ""),
+        title: String(note.title || inferTitleFromUrl(note.url) || "Police video"),
+        transcript: String(note.transcript || ""),
+        prompt: String(note.prompt || ""),
+        tag: String(note.tag || "patrol"),
+        tagLabel: String(note.tagLabel || "パトロール"),
+        createdAt: note.createdAt || new Date().toISOString()
+      }));
+
+    if (!normalized.length) {
+      showToast("復元できる動画がありません");
+      return;
+    }
+
+    const existing = new Map(notes.map((note) => [note.id, note]));
+    normalized.forEach((note) => existing.set(note.id, note));
+    notes = [...existing.values()].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    selectedId = notes[0]?.id || null;
+    persist();
+    renderLibrary();
+    if (selectedId) loadNote(selectedId);
+    els.backupInput.value = "";
+    showToast("保存データを復元しました");
+  } catch {
+    showToast("復元データの形式が違います");
+  }
+}
+
 els.tags.forEach((button) => {
   button.addEventListener("click", () => {
     selectedTag = button.dataset.tag;
@@ -329,6 +396,8 @@ els.clearButton.addEventListener("click", clearForm);
 els.quickSaveButton.addEventListener("click", saveCurrentNote);
 els.saveButton.addEventListener("click", saveCurrentNote);
 els.exportButton.addEventListener("click", exportMarkdown);
+els.backupCopyButton.addEventListener("click", copyBackup);
+els.restoreButton.addEventListener("click", restoreBackup);
 
 els.copyPromptButton.addEventListener("click", () => {
   renderAnalysis();

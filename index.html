@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Police Notes">
     <title>Police Video Notes</title>
-    <link rel="manifest" href="manifest.webmanifest?v=6">
+    <link rel="manifest" href="manifest.webmanifest?v=7">
     <link rel="apple-touch-icon" href="assets/video-study-header.png">
-    <link rel="stylesheet" href="styles.css?v=6">
+    <link rel="stylesheet" href="styles.css?v=7">
   </head>
   <body>
     <div class="app-shell">
@@ -134,6 +134,13 @@
           </div>
 
           <div id="libraryList" class="library-list"></div>
+
+          <div class="backup-tools">
+            <h3>バックアップ</h3>
+            <button class="secondary-button" id="backupCopyButton" type="button">保存データをコピー</button>
+            <textarea id="backupInput" rows="4" placeholder="復元するときは、コピーしておいた保存データをここに貼ります。"></textarea>
+            <button class="secondary-button" id="restoreButton" type="button">貼ったデータで復元</button>
+          </div>
         </aside>
       </main>
 
@@ -145,6 +152,6 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js?v=6"></script>
+    <script src="script.js?v=7"></script>
   </body>
 </html>

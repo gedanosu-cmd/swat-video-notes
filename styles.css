@@ -324,6 +324,23 @@ ol {
   font-size: 12px;
 }
 
+.backup-tools {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.backup-tools h3 {
+  margin: 0;
+}
+
+#backupInput {
+  min-height: 94px;
+  font-size: 13px;
+}
+
 .toast {
   position: fixed;
   right: 18px;
